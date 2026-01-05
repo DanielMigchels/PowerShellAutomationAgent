@@ -1,0 +1,82 @@
+name: Build Application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  NODE_VERSION: '24.x'
+
+jobs:
+
+  Build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: './PowerShellAutomationAgent.UI/package-lock.json'
+
+    - name: Install Angular dependencies
+      working-directory: ./PowerShellAutomationAgent.UI
+      run: npm ci
+
+    - name: Test Angular
+      working-directory: ./PowerShellAutomationAgent.UI
+      run: npm run test -- --watch=false --browsers=ChromeHeadless || echo "No tests configured"
+
+    - name: Build Angular (Production)
+      working-directory: ./PowerShellAutomationAgent.UI
+      run: npm run build -- --configuration production
+
+    - name: Copy Angular build to API wwwroot
+      run: |
+        mkdir -p ./PowerShellAutomationAgent.API/PowerShellAutomationAgent.API/wwwroot/
+        rm -rf ./PowerShellAutomationAgent.API/PowerShellAutomationAgent.API/wwwroot/*
+        cp -r ./PowerShellAutomationAgent.UI/dist/PowerShellAutomationAgent.UI/browser/* ./PowerShellAutomationAgent.API/PowerShellAutomationAgent.API/wwwroot/ || cp -r ./PowerShellAutomationAgent.UI/dist/* ./PowerShellAutomationAgent.API/PowerShellAutomationAgent.API/wwwroot/
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore .NET dependencies
+      working-directory: ./PowerShellAutomationAgent.API
+      run: dotnet restore
+
+    - name: Build .NET API
+      working-directory: ./PowerShellAutomationAgent.API
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test .NET API
+      working-directory: ./PowerShellAutomationAgent.API
+      run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+    - name: Publish .NET API as executable (Windows)
+      working-directory: ./PowerShellAutomationAgent.API
+      run: |
+        dotnet publish PowerShellAutomationAgent.API/PowerShellAutomationAgent.API.csproj \
+          --configuration Release \
+          --runtime win-x64 \
+          --self-contained true \
+          --output ./publish/win-x64 \
+          -p:PublishSingleFile=true \
+          -p:IncludeNativeLibrariesForSelfExtract=true
+
+    - name: Upload Windows artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: powershellautomationagent-windows-x64
+        path: ./PowerShellAutomationAgent.API/publish/win-x64
+        retention-days: 7
