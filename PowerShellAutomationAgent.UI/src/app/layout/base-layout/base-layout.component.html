@@ -1,0 +1,20 @@
+<div class="h-screen w-screen flex flex-col">
+  <div class="bg-company-primary text-company-secondary h-14 px-4 lg:px-12 shadow flex justify-between gap-12 items-center z-10">
+    <div class="flex justify-start items-center gap-10">
+      <div class="h-full flex items-center gap-10 cursor-pointer hover:underline" (click)="navigateHome()">
+        <img src="mini_logo.png" class="h-10">
+        <div class="font-semibold">Powershell Automation Agent</div>
+      </div>
+      <div class="flex items-center gap-6 text-sm">
+        <div (click)="navigateProjects()" class="cursor-pointer hover:underline">Projects</div>
+        <div (click)="navigateJobs()" class="cursor-pointer hover:underline">Jobs</div>
+      </div>
+    </div>
+    <div>
+      <button (click)="logout()" class="font-bold hover:underline cursor-pointer px-3">Logout</button>
+    </div>
+  </div>
+  <div class=" bg-white h-full overflow-auto">
+    <router-outlet></router-outlet>
+  </div>  
+</div>

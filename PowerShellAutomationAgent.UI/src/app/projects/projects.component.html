@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-6 pt-6">
+  <div class="flex justify-center">
+    <div class=" w-full lg:w-4xl flex justify-between items-start border-b border-b-gray pb-3">
+      <span class="text-xl font-semibold">Projects</span>
+      <button (click)="createProject()" class="bg-success hover:bg-dark-success text-white px-3 py-2 rounded cursor-pointer">
+        Add project
+      </button>
+    </div>
+  </div>
+
+  <div class="flex justify-center">
+    <div class="w-full lg:w-4xl gap-2 flex flex-col" *ngIf="projects">
+      @for (project of projects.data; track project.id) {
+      <div class="flex items-center w-full bg-true-white border border-gray rounded px-4 py-3 justify-between">
+        <div>
+          <p class="font-semibold">{{ project.name }}</p>
+          <p class="text-sm text-dark-gray">Created on {{ project.createdOnUtc | date: 'short' }}</p>
+        </div>
+        <div class="flex items-center gap-3 justify-center">
+          <button (click)="openScript(project.id)"
+            class="hover:underline cursor-pointer text-primary flex justify-center items-center">
+            <ng-icon name="heroCodeBracket"></ng-icon>
+          </button>
+          <button (click)="editProject(project.id)" class="hover:underline cursor-pointer text-dark-gray flex justify-center items-center">
+            <ng-icon name="heroPencil"></ng-icon>
+          </button>
+          <button (click)="startScript(project.id)"
+            class="hover:underline cursor-pointer text-success flex justify-center items-center">
+            <ng-icon name="heroPlay"></ng-icon>
+          </button>
+        </div>
+      </div>
+      }
+
+      <div *ngIf="projects">
+        <div class="flex justify-end gap-1">
+          <div class="bg-true-white hover:bg-white border border-gray px-3 py-2 rounded cursor-pointer"
+            *ngIf="projects.hasPrevious" (click)="previousPage()">
+            Back
+          </div>
+          <div class="bg-true-white hover:bg-white border border-gray px-3 py-2 rounded cursor-pointer"
+            *ngIf="projects.hasNext" (click)="nextPage()">
+            Next
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

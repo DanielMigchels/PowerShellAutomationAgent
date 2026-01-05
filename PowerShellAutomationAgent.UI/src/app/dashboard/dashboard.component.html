@@ -1,0 +1,35 @@
+<div class="flex flex-col gap-6 pt-6">
+  <div class="flex justify-center">
+    <div class="w-full lg:w-4xl">
+      <div class="flex flex-row gap-2">
+        <div (click)="navigateJobs()"
+          class="hover:underline w-full border border-dark-primary rounded py-4 px-6 bg-primary text-white cursor-pointer">
+          <p class="font-semibold">{{runningJobs}}</p>
+          <p class="text-xs">Running jobs</p>
+        </div>
+        <div (click)="navigateJobs()"
+          class="hover:underline w-full border border-dark-success rounded py-4 px-6 bg-success text-white cursor-pointer">
+          <p class="font-semibold">{{successfulJobs}}</p>
+          <p class="text-xs">Successful jobs</p>
+        </div>
+        <div (click)="navigateJobs()"
+          class="hover:underline w-full border border-dark-error rounded py-4 px-6 bg-error text-white cursor-pointer">
+          <p class="font-semibold">{{failedJobs}}</p>
+          <p class="text-xs">Failed jobs</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-center">
+    <div class=" w-full lg:w-4xl flex justify-between items-start border-b border-b-gray pb-3">
+      <span class="text-xl font-semibold">Recent jobs</span>
+    </div>
+  </div>
+  <div class="flex justify-center">
+    <div class="w-full lg:w-4xl gap-2 flex flex-col">
+      @for (job of jobs; track job.id) {
+        <app-job [job]="job"></app-job>
+      }
+    </div>
+  </div>
+</div>

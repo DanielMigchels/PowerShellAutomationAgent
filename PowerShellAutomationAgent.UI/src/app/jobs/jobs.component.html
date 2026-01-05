@@ -1,0 +1,26 @@
+<div class="flex flex-col gap-6 pt-6">
+  <div class="flex justify-center">
+    <div class=" w-full lg:w-4xl flex justify-between items-start border-b border-b-gray pb-3">
+      <span class="text-xl font-semibold">Jobs</span>
+    </div>
+  </div>
+  <div class="flex justify-center">
+    <div class="w-full lg:w-4xl gap-2 flex flex-col" *ngIf="jobs">
+      @for (job of jobs.data; track job.id) {
+        <app-job [job]="job"></app-job>
+      }
+      <div *ngIf="jobs">
+        <div class="flex justify-end gap-1">
+          <div class="bg-true-white hover:bg-white border border-gray px-3 py-2 rounded cursor-pointer"
+            *ngIf="jobs.hasPrevious" (click)="previousPage()">
+            Back
+          </div>
+          <div class="bg-true-white hover:bg-white border border-gray px-3 py-2 rounded cursor-pointer"
+            *ngIf="jobs.hasNext" (click)="nextPage()">
+            Next
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

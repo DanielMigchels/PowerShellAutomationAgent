@@ -1,0 +1,42 @@
+<div class="flex items-center w-full bg-true-white border border-gray rounded px-4 py-3 justify-between">
+  <div>
+    <p class="flex items-center gap-8">
+      <span class="font-semibold">Job {{job!.id}}</span>
+      <span class="text-sm">({{job!.projectName}})</span>
+    </p>
+    <div class="text-sm text-dark-gray flex items-center gap-4">
+      <div class="flex gap-2 min-w-48">
+        <span class="font-semibold">Runtime:</span>
+        <span>{{runtime}}</span>
+      </div>
+      <div class="flex gap-2">
+        <span class="font-semibold">Starttime:</span>
+        <span>{{job!.createdOnUtc | date:'short'}}</span>
+      </div>
+    </div>  
+  </div>
+  <div class="flex items-center gap-3 justify-center">
+    <button (click)="downloadArtifacts(job!.id)" *ngIf="job!.hasArtifacts"
+      class="flex items-center gap-1 text-dark-gray text-sm cursor-pointer hover:border-b-dark-gray hover:border-b-1">
+      <ng-icon name="heroArrowDownTray"></ng-icon>
+      <p>Artifacts</p>
+    </button>
+    <button (click)="openJob(job!.id)"
+      class="flex items-center gap-1 text-dark-gray text-sm cursor-pointer hover:border-b-dark-gray hover:border-b-1">
+      <ng-icon name="heroEye"></ng-icon>
+      <p>View logs</p>
+    </button>
+    <div class="text-success text-2xl w-6" *ngIf="job!.state === JobStates.Succeeded">
+      <ng-icon name="heroCheckCircle"></ng-icon>
+    </div>
+    <div class="text-error text-2xl w-6" *ngIf="job!.state === JobStates.Failed">
+      <ng-icon name="heroXCircle"></ng-icon>
+    </div>
+    <div class="text-dark-gray text-2xl w-6" *ngIf="job!.state === JobStates.Queued">
+      <ng-icon name="heroClock"></ng-icon>
+    </div>
+    <div class="w-6" *ngIf="job!.state === JobStates.InProgress">
+      <app-loader></app-loader>
+    </div>
+  </div>
+</div>

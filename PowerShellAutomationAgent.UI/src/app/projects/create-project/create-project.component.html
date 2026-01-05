@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-6 pt-6">
+  <form [formGroup]="formGroup" class="flex flex-col items-center justify-center gap-2">
+    <div class="">
+      <p class="text-sm text-black">Project name</p>
+      <input formControlName="name" type="text" class="w-96 border border-gray rounded p-2 max-w-md placeholder:text-dark-gray bg-true-white" placeholder="Enter a project name"  />
+    </div>
+    <div class="flex justify-end w-96">
+    <button (click)="createProject()"
+      class="max-w-40 bg-success hover:bg-dark-success text-white px-3 py-2 rounded cursor-pointer">
+      Add project
+    </button>
+    </div>
+  </form>
+</div>

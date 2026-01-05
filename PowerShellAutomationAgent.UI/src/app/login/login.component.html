@@ -1,0 +1,14 @@
+<form [formGroup]="formGroup" class="flex flex-col justify-center items-center gap-2 w-80">
+  <h1 class="pb-5 font-semibold">Enter the password to proceed.</h1>
+  <div class="w-full">
+    <input formControlName="password" class="border rounded px-3 py-2 border-gray w-full placeholder:text-dark-gray" type="password"
+      placeholder="Password" />
+    <div *ngIf="formGroup.get('password')?.invalid && formGroup.get('password')?.touched" class="text-error text-sm">
+      <span *ngIf="formGroup.get('password')?.errors?.['required']">Enter a password.</span>
+    </div>
+  </div>
+
+  <button type="submit" (click)="login()"
+    class="bg-company-primary shadow-sm cursor-pointer hover:bg-company-primary-dark px-3 py-2 w-full rounded text-company-secondary">Login</button>
+  <span *ngIf="rejected" class="text-error text-sm">Wrong password.</span>
+</form>
